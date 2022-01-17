@@ -24,7 +24,7 @@ module.exports = {
     },
   },
   rules: {
-    // 'import/no-unresolved': 'off',
-    'import/no-import-module-export': 'off',
+    'import/extensions': 'off',
+    'import/no-import-module-exports': 'off',
   },
 };
