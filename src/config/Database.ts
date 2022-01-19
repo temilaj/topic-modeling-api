@@ -16,8 +16,6 @@ export const models: IDatabase = {
 export const connectToDB = (databaseURI: string): Connection => {
   const connect = async () => {
     const databaseOptions = {
-      reconnectTries: Number.MAX_VALUE,
-      bufferTimeoutMS: 500,
       minPoolSize: 10,
     };
 
