@@ -28,6 +28,21 @@ export function signToken(user: IUserDocument, duration?: string): string {
   );
 }
 
+export function signRefreshToken(user: IUserDocument): string {
+  const { id, refreshTokenVersion } = user;
+  return jwt.sign(
+    {
+      sub: id,
+      tokenVersion: refreshTokenVersion,
+    },
+    config.refreshTokenSecret,
+    {
+      issuer: config.appURL,
+      expiresIn: '7d',
+    },
+  );
+}
+
 export function sendJSONResponse(
   res: Response,
   status: number,

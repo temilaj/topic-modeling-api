@@ -46,7 +46,7 @@ switch (environment) {
     environmentConfig = { ...baseConfig, ...developmentConfig };
     break;
 }
-export const configuration = {
+const configuration = {
   ...environmentConfig,
   isProduction: production,
   isDevelopment: development,
