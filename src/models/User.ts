@@ -11,7 +11,6 @@ export interface IUserDocument extends Document {
   activationToken: string;
   resetTokenExpiry: number;
   refreshTokenVersion: number;
-  lastLoginDate: number;
   imageUrl: string;
   createdAt: Date;
   updatedAt: Date | number;
@@ -48,7 +47,6 @@ const UserSchema: Schema<IUserDocument> = new Schema(
       type: Number,
       default: 0,
     },
-    lastLoginDate: Number,
     imageUrl: { type: String, default: '', trim: true },
   },
   {

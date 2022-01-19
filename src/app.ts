@@ -6,6 +6,8 @@ import cors from 'cors';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 
+import routes from './routes/v1';
+
 const app: Application = express();
 
 app.use(morgan('dev'));
@@ -20,9 +22,6 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 // mount api v1 routes
-
-app.get('/', (req, res) => {
-  res.send('Hello World');
-});
+app.use('/v1', routes);
 
 export default server;
