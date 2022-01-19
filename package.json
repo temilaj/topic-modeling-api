@@ -17,7 +17,7 @@
     "format": "prettier --write \"src/**/*.{js,ts}\"",
     "clean:deps": "rm -rf node_modules"
   },
-  "author": "",
+  "author": "tlaj@bu.edu",
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.1058.0",

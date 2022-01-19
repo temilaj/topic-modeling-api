@@ -18,13 +18,14 @@ module.exports = {
   settings: {
     'import/resolver': {
       node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        extensions: ['.js', 'd.ts', '.ts'],
         moduleDirectory: ['node_modules', './src'],
       },
     },
   },
   rules: {
     'import/extensions': 'off',
+		"import/no-unresolved": "off",
     'import/no-import-module-exports': 'off',
   },
 };
