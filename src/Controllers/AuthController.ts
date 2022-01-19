@@ -96,6 +96,12 @@ class AuthController {
       'Sign in successful',
     );
   }
+
+  static async logOut(req: Request, res: Response): Promise<Response<any>> {
+    res.clearCookie('refreshToken', configuration.cookie.options);
+    logger.info('sign out successful');
+    return sendJSONResponse(res, 200, {}, 'singout successful');
+  }
 }
 
 export default AuthController;

@@ -9,4 +9,6 @@ router.post('/login', loginValidator, catchErrors(AuthController.logIn));
 
 router.post('/signup', signUpValidator, catchErrors(AuthController.signUp));
 
+router.post('/logout', catchErrors(AuthController.logOut));
+
 export default router;
