@@ -38,3 +38,8 @@ export type Cookie = {
     options: CookieOptions;
   };
 };
+
+export interface RefreshTokenData {
+  sub: string;
+  tokenVersion: number;
+}

@@ -11,4 +11,6 @@ router.post('/signup', signUpValidator, catchErrors(AuthController.signUp));
 
 router.post('/logout', catchErrors(AuthController.logOut));
 
+router.post('/refresh-token', catchErrors(AuthController.refreshToken));
+
 export default router;

@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 import { models } from '../config/Database';
 import configuration from '../config/environments';
 import errorMessages from '../utils/errorMessages';
 import { sendJSONResponse, signRefreshToken, signToken } from '../utils/helpers';
 import logger from '../config/logger';
+import { RefreshTokenData } from '../@types';
 
 const { User } = models;
 
@@ -101,6 +103,50 @@ class AuthController {
     res.clearCookie('refreshToken', configuration.cookie.options);
     logger.info('sign out successful');
     return sendJSONResponse(res, 200, {}, 'singout successful');
+  }
+
+  static async refreshToken(req: Request, res: Response): Promise<Response<any>> {
+    logger.info(`attempting to refresh token`);
+
+    if (req.headers?.origin !== configuration.appURL) {
+      logger.info('refresh token origin mismatch');
+      return sendJSONResponse(res, 401, { accessToken: '' }, '');
+    }
+    const token = req.cookies?.refreshToken;
+    if (!token) {
+      logger.info('refresh token not supplied');
+      return sendJSONResponse(res, 401, { accessToken: '' }, '');
+    }
+
+    let decoded: null | string | object = null;
+    try {
+      decoded = jwt.verify(token, configuration.refreshTokenSecret);
+      logger.info('refresh token decoded');
+    } catch (err) {
+      logger.info('Invalid refresh token supplied');
+      return sendJSONResponse(res, 401, { accessToken: '' }, '');
+    }
+
+    // token is valid send back access token
+    const { sub, tokenVersion } = <RefreshTokenData>decoded;
+    const user = await User.findById(sub);
+
+    if (!user) {
+      logger.info('refresh token user not found');
+
+      return sendJSONResponse(res, 401, { accessToken: '' }, '');
+    }
+
+    if (user.refreshTokenVersion !== tokenVersion) {
+      logger.info('refresh token version incorrect');
+      return sendJSONResponse(res, 200, { authToken: '' }, '');
+    }
+
+    const refreshToken = signRefreshToken(user);
+    const authToken = signToken(user, '1h');
+    logger.info('token refresh successful');
+    res.cookie('refreshToken', refreshToken, configuration.cookie.options);
+    return sendJSONResponse(res, 201, { authToken }, '');
   }
 }
 
