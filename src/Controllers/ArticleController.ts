@@ -34,6 +34,21 @@ class AuthController {
       'artcile created successfully',
     );
   }
+
+  static async deleteArticle(req: Request, res: Response): Promise<Response<any>> {
+    logger.info('attempting to delete article');
+    const currentUser = req.user!;
+    const { id: articleId } = req.params;
+    const article = await Article.findById(articleId);
+    if (!article) {
+      logger.warn(`Error getting article with id (${articleId})`);
+      return sendJSONResponse(res, 404, {}, 'article not found.');
+    }
+    await article.remove();
+
+    logger.info(`article ${article.title} deleted by ${currentUser.email} successfully`);
+    return sendJSONResponse(res, 204, {}, 'article deleted successfully');
+  }
 }
 
 export default AuthController;

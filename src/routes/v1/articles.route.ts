@@ -8,5 +8,6 @@ import { createArticleValidator } from '../../policies/article';
 const router = express.Router();
 
 router.post('/', authenticate, createArticleValidator, catchErrors(ArticleController.createArticle));
+router.delete('/:id', authenticate, catchErrors(ArticleController.deleteArticle));
 
 export default router;
