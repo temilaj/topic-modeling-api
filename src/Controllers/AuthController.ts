@@ -32,7 +32,15 @@ class AuthController {
     });
 
     const createdUser = await user.save();
-    const authToken = signToken(createdUser);
+    let authToken;
+    if (req.headers?.origin === configuration.appURL) {
+      const refreshToken = signRefreshToken(user);
+      authToken = signToken(user, '7d');
+      res.cookie('refreshToken', refreshToken, configuration.cookie.options);
+    } else {
+      authToken = signToken(user);
+    }
+
     logger.info(`user ${email} ${user.firstName} created successfully`);
 
     return sendJSONResponse(
