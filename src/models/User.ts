@@ -8,7 +8,6 @@ export interface IUserDocument extends Document {
   lastName: string;
   password: string;
   resetToken: string;
-  activationToken: string;
   resetTokenExpiry: number;
   refreshTokenVersion: number;
   imageUrl: string;
@@ -42,7 +41,6 @@ const UserSchema: Schema<IUserDocument> = new Schema(
     },
     resetToken: String,
     resetTokenExpiry: Number,
-    activationToken: String,
     refreshTokenVersion: {
       type: Number,
       default: 0,

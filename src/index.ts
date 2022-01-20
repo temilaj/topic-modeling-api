@@ -12,7 +12,7 @@ const { port, env, database } = config;
 
 connectToDB(database.URI);
 
-app.listen(port, () => logger.info(`server started on port ${port} (${env})`));
+app.listen(port, () => logger.info(` (${env}) server started on port ${port}`));
 
 /**
  * Exports express
