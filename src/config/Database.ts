@@ -1,16 +1,19 @@
-import mongoose, { Model, Connection, MongooseOptions } from 'mongoose';
+import mongoose, { Model, Connection } from 'mongoose';
 
 import { IUserDocument, User } from '../models/User';
+import { IArticleDocument, Article } from '../models/Article';
 
 import config from './environments';
 import logger from './logger';
 
 export interface IDatabase {
   User: Model<IUserDocument>;
+  Article: Model<IArticleDocument>;
 }
 
 export const models: IDatabase = {
   User,
+  Article,
 };
 
 export const connectToDB = (databaseURI: string): Connection => {
