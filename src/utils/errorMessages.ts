@@ -11,6 +11,7 @@ const errorMessages = {
   emailLengthError: 'email must be at least 3 characters long',
   passwordLengthError: 'password must be at least 6 characters long',
   nameLengthError: 'name must be at least 2 characters long',
+  titleLengthError: 'Title must be between 2 and 256 characters long',
   defaultError: 'something went wrong',
 };
 

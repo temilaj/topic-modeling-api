@@ -43,3 +43,20 @@ export interface RefreshTokenData {
   sub: string;
   tokenVersion: number;
 }
+
+export interface DecodedUser {
+  userId: string;
+  email: string;
+}
+
+export interface SignedTokenData {
+  sub: string;
+  email: string;
+}
+
+declare module 'express' {
+  export interface Request {
+    user?: DecodedUser;
+    isAuthenticated?: boolean;
+  }
+}

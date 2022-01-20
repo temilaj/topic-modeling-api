@@ -1,4 +1,5 @@
 import express from 'express';
+
 import AuthController from '../../Controllers/AuthController';
 import { catchErrors } from '../../utils/helpers';
 import { loginValidator, signUpValidator } from '../../policies/auth';
