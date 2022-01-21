@@ -58,5 +58,6 @@ declare module 'express' {
   export interface Request {
     user?: DecodedUser;
     isAuthenticated?: boolean;
+    files?: Array<Files>;
   }
 }

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
+import fetch from 'node-fetch';
 
 import config from '../config/environments';
 import { IUserDocument } from '../models/User';
@@ -43,12 +44,7 @@ export function signRefreshToken(user: IUserDocument): string {
   );
 }
 
-export function sendJSONResponse(
-  res: Response,
-  status: number,
-  data: Record<string, unknown> | null,
-  message: string,
-): Response<any> {
+export function sendJSONResponse(res: Response, status: number, data: Record<string, unknown> | null, message: string) {
   return res.status(status).json({
     message,
     data,
@@ -99,3 +95,19 @@ export const slugify = (text: string) =>
     .toLowerCase()
     .replace(/ /g, '-')
     .replace(/[^\w-]+/g, '');
+
+export function escapeRegex(regexString: string): string {
+  return regexString.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
+
+export async function downloadFile(url: string) {
+  try {
+    const response = await fetch(url);
+    const body = await response.text();
+    console.log({ body });
+    return body;
+  } catch (error) {
+    console.error(error);
+    return '';
+  }
+}

@@ -28,8 +28,6 @@ const ArticleSchema: Schema<IArticleDocument> = new Schema(
     },
     content: {
       type: String,
-      trim: true,
-      required: true,
     },
     createdBy: {
       type: Schema.Types.ObjectId,
