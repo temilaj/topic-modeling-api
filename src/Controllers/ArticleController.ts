@@ -49,6 +49,8 @@ class AuthController {
     logger.info(`attempting to create article with title ${title}`);
 
     let slug = slugify(title);
+
+    // TODO: swtich to pub sub model to extract text and generate topics
     const parsedContentPromise = downloadFile(documentUrl);
     const exisitngArticlesPromise = Article.find({ slug: new RegExp(slug, 'gi') }).sort({ createdAt: -1 });
     const [exisitngArticles, parsedContent] = await Promise.all([exisitngArticlesPromise, parsedContentPromise]);
