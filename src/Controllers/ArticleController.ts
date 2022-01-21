@@ -1,9 +1,17 @@
-import fs from 'fs';
 import { Request, Response } from 'express';
 
 import { models } from '../config/Database';
-import { downloadFile, escapeRegex, getQueryOptions, paginate, sendJSONResponse, slugify } from '../utils/helpers';
+import {
+  downloadFile,
+  escapeRegex,
+  getQueryOptions,
+  isValidId,
+  paginate,
+  sendJSONResponse,
+  slugify,
+} from '../utils/helpers';
 import logger from '../config/logger';
+import errorMessages from '../utils/errorMessages';
 
 const { Article } = models;
 
@@ -40,8 +48,14 @@ class AuthController {
     const currentUser = req.user!;
     logger.info(`attempting to create article with title ${title}`);
 
-    const slug = slugify(title);
-    const parsedContent = await downloadFile(documentUrl);
+    let slug = slugify(title);
+    const parsedContentPromise = downloadFile(documentUrl);
+    const exisitngArticlesPromise = Article.find({ slug: new RegExp(slug, 'gi') }).sort({ createdAt: -1 });
+    const [exisitngArticles, parsedContent] = await Promise.all([exisitngArticlesPromise, parsedContentPromise]);
+
+    if (exisitngArticles.length > 0) {
+      slug = `${slug}-${exisitngArticles.length + 1}`;
+    }
 
     const article = new Article({
       title,
@@ -63,6 +77,25 @@ class AuthController {
       },
       'article created successfully',
     );
+  }
+
+  static async getArticle(req: Request, res: Response) {
+    logger.info('attempting to get article');
+    const { id: articleId } = req.params;
+
+    let article;
+    if (isValidId(articleId)) {
+      article = await Article.findById(articleId);
+    } else {
+      article = await Article.findOne({ slug: articleId });
+    }
+
+    if (!article) {
+      logger.warn(`Error getting article with Id ${articleId}. Article not found`);
+      return sendJSONResponse(res, 404, {}, errorMessages.notFound);
+    }
+
+    return sendJSONResponse(res, 200, { article }, 'article retrieved successfully');
   }
 
   static async deleteArticle(req: Request, res: Response) {
