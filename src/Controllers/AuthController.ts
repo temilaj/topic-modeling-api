@@ -35,7 +35,7 @@ class AuthController {
     let authToken;
     if (req.headers?.origin === configuration.appURL) {
       const refreshToken = signRefreshToken(user);
-      authToken = signToken(user, '7d');
+      authToken = signToken(user, '48h');
       res.cookie('refreshToken', refreshToken, configuration.cookie.options);
     } else {
       authToken = signToken(user);
@@ -83,7 +83,7 @@ class AuthController {
     let authToken;
     if (req.headers?.origin === configuration.appURL) {
       const refreshToken = signRefreshToken(user);
-      authToken = signToken(user, '7d');
+      authToken = signToken(user, '48h');
       res.cookie('refreshToken', refreshToken, configuration.cookie.options);
     } else {
       authToken = signToken(user);
